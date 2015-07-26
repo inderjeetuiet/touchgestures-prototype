@@ -15,13 +15,13 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity extends ActionBarActivity {
-    FrameLayout layout;
     RelativeLayout main;
     View line;
     Rect rect = null;
     private int _xDelta;
     private float density = 0;
     private float scaleFactor;
+    FrameLayout layout;
     private static String TAG = "MainActivity";
     ScaleGestureDetector scaleGestureDetector;
     private GestureDetectorCompat mDetector;
@@ -31,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         main = (RelativeLayout) findViewById(R.id.main_panel);
+        layout = (FrameLayout) findViewById(R.id.chart);
         line = (View) findViewById(R.id.drag_line);
 
         mDetector = new GestureDetectorCompat(MainActivity.this, new swipeGestureListener());
@@ -44,9 +45,9 @@ public class MainActivity extends ActionBarActivity {
                 rect = new Rect();
                 line.getHitRect(rect);
                 rect.top -= density * 50;
-                rect.left -= density * 100;
+                rect.left -= density * 50;
                 rect.bottom += density * 50;
-                rect.right += density * 100;
+                rect.right += density * 50;
                 parent.setTouchDelegate( new TouchDelegate( rect , line));
             }
         });
@@ -77,6 +78,7 @@ public class MainActivity extends ActionBarActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 final int action = motionEvent.getAction();
                 final int x = (int) motionEvent.getRawX();
+
                 switch (action & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN: {
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
@@ -85,6 +87,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                     case MotionEvent.ACTION_MOVE:{
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+                        //params.rightMargin = (int)density *(-50);
                         params.leftMargin = x - _xDelta;
                         line.setLayoutParams(params);
                         if(line.getX() < layout.getWidth() && line.getX() > 0) {
@@ -93,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
                         return true;
                     }
                     case MotionEvent.ACTION_UP: {
-                        Log.d(TAG, "Line Touch UP");
+                      Log.d(TAG, "FINGER UP");
                     }
                 }
                 return true;
