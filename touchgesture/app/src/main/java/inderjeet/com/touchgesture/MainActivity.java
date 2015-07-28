@@ -15,15 +15,16 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity extends ActionBarActivity {
-    RelativeLayout main;
-    View line;
-    Rect rect = null;
+
+    private RelativeLayout main;
+    private View line;
+    private Rect rect = null;
     private int _xDelta;
     private float density = 0;
     private float scaleFactor;
-    FrameLayout layout;
+    private FrameLayout layout;
     private static String TAG = "MainActivity";
-    ScaleGestureDetector scaleGestureDetector;
+    private ScaleGestureDetector scaleGestureDetector;
     private GestureDetectorCompat mDetector;
 
     @Override
@@ -38,6 +39,10 @@ public class MainActivity extends ActionBarActivity {
         scaleGestureDetector = new ScaleGestureDetector(MainActivity.this, new pinchOnScaleGestureListener());
         density = getResources().getDisplayMetrics().density;
         final View parent = (View) line.getParent();
+
+        /**
+         * Define touch delegate to increase the touch area of view (line)
+         */
 
         parent.post(new Runnable() {
             @Override
@@ -96,7 +101,7 @@ public class MainActivity extends ActionBarActivity {
                         return true;
                     }
                     case MotionEvent.ACTION_UP: {
-                      Log.d(TAG, "FINGER UP");
+                        Log.d(TAG, "FINGER UP");
                     }
                 }
                 return true;
@@ -104,6 +109,7 @@ public class MainActivity extends ActionBarActivity {
         });
 
     }
+
     /**
      * Definition of pinch class to handle both pinch IN/OUT
      */
@@ -132,6 +138,11 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
+
+    /**
+     * Definition to apply SWIPE LEFT/RIGHT
+     */
+
     class swipeGestureListener extends GestureDetector.SimpleOnGestureListener {
 
         private static final int SWIPE_MIN_DISTANCE = 200;
