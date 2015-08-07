@@ -14,7 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity
+{
 
     private RelativeLayout main;
     private View line;
@@ -28,7 +29,8 @@ public class MainActivity extends ActionBarActivity {
     private GestureDetectorCompat mDetector;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         main = (RelativeLayout) findViewById(R.id.main_panel);
@@ -44,9 +46,11 @@ public class MainActivity extends ActionBarActivity {
          * Define touch delegate to increase the touch area of view (line)
          */
 
-        parent.post(new Runnable() {
+        parent.post(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 rect = new Rect();
                 line.getHitRect(rect);
                 rect.top -= density * 50;
@@ -61,13 +65,18 @@ public class MainActivity extends ActionBarActivity {
          * Handling pinch in/out on parent layout @main
          */
 
-        main.setOnTouchListener(new View.OnTouchListener() {
+        main.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View view, MotionEvent ev) {
-                if(ev.getPointerCount() > 1) {
+            public boolean onTouch(View view, MotionEvent ev)
+            {
+                if(ev.getPointerCount() > 1)
+                {
                     scaleGestureDetector.onTouchEvent(ev);
                     return true;
-                }   else {
+                }
+                else
+                {
                     mDetector.onTouchEvent(ev);
                     return true;
                 }
@@ -78,31 +87,32 @@ public class MainActivity extends ActionBarActivity {
          *OnTouch on libe view for handling drag of line over framelayout and extarcting coordinates
          */
 
-        line.setOnTouchListener(new View.OnTouchListener() {
+        line.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public boolean onTouch(View view, MotionEvent motionEvent)
+            {
                 final int action = motionEvent.getAction();
                 final int x = (int) motionEvent.getRawX();
 
-                switch (action & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN: {
+                switch (action & MotionEvent.ACTION_MASK)
+                {
+                    case MotionEvent.ACTION_DOWN:
                         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
                         _xDelta = x - params.leftMargin;
                         return true;
-                    }
-                    case MotionEvent.ACTION_MOVE:{
-                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+                    case MotionEvent.ACTION_MOVE:
+                        FrameLayout.LayoutParams params_move = (FrameLayout.LayoutParams) view.getLayoutParams();
                         //params.rightMargin = (int)density *(-50);
-                        params.leftMargin = x - _xDelta;
-                        line.setLayoutParams(params);
-                        if(line.getX() < layout.getWidth() && line.getX() > 0) {
+                        params_move.leftMargin = x - _xDelta;
+                        line.setLayoutParams(params_move);
+                        if(line.getX() < layout.getWidth() && line.getX() > 0)
+                        {
                             line.invalidate();
                         }
                         return true;
-                    }
-                    case MotionEvent.ACTION_UP: {
+                    case MotionEvent.ACTION_UP:
                         Log.d(TAG, "FINGER UP");
-                    }
                 }
                 return true;
             }
@@ -114,26 +124,30 @@ public class MainActivity extends ActionBarActivity {
      * Definition of pinch class to handle both pinch IN/OUT
      */
 
-    public class pinchOnScaleGestureListener extends
-            ScaleGestureDetector.SimpleOnScaleGestureListener {
-
+    public class pinchOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
+    {
         @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-
+        public boolean onScale(ScaleGestureDetector detector)
+        {
             scaleFactor = detector.getScaleFactor();
             return true;
         }
 
         @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
+        public boolean onScaleBegin(ScaleGestureDetector detector)
+        {
             return true;
         }
 
         @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
-            if(scaleFactor > 1){
+        public void onScaleEnd(ScaleGestureDetector detector)
+        {
+            if(scaleFactor > 1)
+            {
                 Log.d(TAG, "ZOOM OUT");
-            } else {
+            }
+            else
+            {
                 Log.d(TAG, "ZOOM IN");
             }
         }
@@ -143,26 +157,34 @@ public class MainActivity extends ActionBarActivity {
      * Definition to apply SWIPE LEFT/RIGHT
      */
 
-    class swipeGestureListener extends GestureDetector.SimpleOnGestureListener {
+    class swipeGestureListener extends GestureDetector.SimpleOnGestureListener
+    {
 
         private static final int SWIPE_MIN_DISTANCE = 200;
         private static final int SWIPE_MAX_OFF_PATH = 250;
         private static final int SWIPE_THRESHOLD_VELOCITY = 1000;
 
         @Override
-        public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX, final float velocityY) {
-            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
+        public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX, final float velocityY)
+        {
+            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+            {
                 return false;
             }
             final float distance = e1.getX() - e2.getX();
             final boolean enoughSpeed = Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY;
-            if (distance > SWIPE_MIN_DISTANCE && enoughSpeed) {
+            if (distance > SWIPE_MIN_DISTANCE && enoughSpeed)
+            {
                 Log.d(TAG, "SWIPE LEFT");
                 return true;
-            } else if (distance < -SWIPE_MIN_DISTANCE && enoughSpeed) {
+            }
+            else if (distance < -SWIPE_MIN_DISTANCE && enoughSpeed)
+            {
                 Log.d(TAG, "SWIPE RIGHT");
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
